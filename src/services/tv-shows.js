@@ -8,11 +8,10 @@ export class TVShowAPI {
       return reponse.data.results[0]
   }
 
-  // static async fetchRecommendations(tvShowId) {
-  //     const response = await axios.get(`${BASE_URL}tv/${tvShowId}/recommendations${API_KEY_PARAM}`)
-  //     return response ;
-  //     // console.log(tvShowId)
-  //   }
+  static async fetchRecommendations(tvShowId) {
+      const response = await axios.get(`${BASE_URL}tv/${tvShowId}/recommendations${API_KEY_PARAM}`)
+      return response;
+    }
 
   // static async fetchByTitle(title) {
     

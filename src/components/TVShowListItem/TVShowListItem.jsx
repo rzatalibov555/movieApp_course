@@ -2,8 +2,8 @@ import { SMALL_IMG_COVER_BASE_URL } from "../../config";
 import s from "./style.module.css";
 const MAX_TITLE_CHAR = 20;
 
-export function TVShowListItem() {
-  // {tvShow, onClickItem}
+export function TVShowListItem({tvShow, onClickItem}) {
+
   return (
     <div 
       onClick={() => onClickItem(tvShow)}

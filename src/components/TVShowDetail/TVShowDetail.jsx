@@ -2,7 +2,7 @@ import { FiveStarRating } from "../FiveStarRating/FiveStarRating";
 import s from "./style.module.css";
 
 export function TVShowDetail({tvShow}) {
-
+  console.log(tvShow)
   return (
     
     <div className={s.container}>
