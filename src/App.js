@@ -2,72 +2,69 @@ import { useEffect, useState } from "react";
 import { TVShowAPI } from "../src/services/tv-shows"
 import logoImg from "./assets/images/logo.png";
 import { Logo } from "./components/Logo/Logo";
-// import { SearchBar } from "./components/SearchBar/SearchBar";
+import { SearchBar } from "./components/SearchBar/SearchBar";
 import { TVShowDetail } from "./components/TVShowDetail/TVShowDetail";
 import { TVShowList } from "./components/TVShowList/TVShowList";
 import { BACKDROP_BASE_URL } from "./config";
 import s from "./style.module.css";
 
 export function App() {
-  
+
   const [currentTVShow, setCurrentTVShow] = useState({})
   const [tvShowRecommendations, setTvShowRecommendations] = useState([])
 
-// ==================================================================================
+  // ==================================================================================
   async function fetchData() {
-      try{
-        const response = await TVShowAPI.fetchPopulars()
-        setCurrentTVShow(response)
-      }catch(error){
-        console.log(error)
-      }  
-  }
-
-  useEffect(() => {
-    fetchData()
-    
-    // unsubscribe
-    return () => {
-      fetchData()
-    }
-    // unsubscribe
-  },[])
-
-// ==================================================================================
-
-
-  async function fetchRecommendations(id){
-    try{
-      const response = await TVShowAPI.fetchRecommendations(id);
-      setTvShowRecommendations(response.data.results.splice(0,7));
-    }catch(error){
+    try {
+      const response = await TVShowAPI.fetchPopulars()
+      setCurrentTVShow(response)
+    } catch (error) {
       console.log(error)
     }
   }
 
   useEffect(() => {
-    fetchRecommendations(currentTVShow.id)
+    fetchData()
+
+    // unsubscribe
+    return () => {
+      fetchData()
+    }
+    // unsubscribe
+  }, [])
+
+  // ==================================================================================
+
+
+  async function fetchRecommendations(id) {
+    try {
+      const response = await TVShowAPI.fetchRecommendations(id);
+      setTvShowRecommendations(response.data.results.splice(0, 7));
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    fetchRecommendations(currentTVShow?.id)
 
     return () => {
-      fetchRecommendations(currentTVShow.id)
+      fetchRecommendations(currentTVShow?.id)
     }
-  },[currentTVShow.id])
+  }, [currentTVShow?.id])
 
-
-
-
-
-
-
-
-
-
-
-  function updateCurrentTVShow(tvShow){
+  function updateCurrentTVShow(tvShow) {
     setCurrentTVShow(tvShow)
   }
 
-
+  async function fetchByTitle(title) {
+    try {
+      const response = await TVShowAPI.fetchByTitle(title);
+      setCurrentTVShow(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
 
   return (
@@ -86,23 +83,31 @@ export function App() {
             <Logo img={logoImg} title="Netflix" subtitle="Netflix movies" />
           </div>
           <div className="col-md-12 col-lg-4">
-            {/* <SearchBar onSubmit={fetchByTitle} /> */}
+            <SearchBar onSubmit={fetchByTitle} />
           </div>
         </div>
       </div>
-      <div className="">
-        {
-          currentTVShow && <TVShowDetail tvShow={currentTVShow} />
-        }
-      </div>
-      <div className="">
-          {
-            currentTVShow && <TVShowList
-            tvShowList={tvShowRecommendations}
-            onClickItem={updateCurrentTVShow}
-            />
-          }
-      </div>
+      {currentTVShow?.id ? (
+        <>
+          <div className="">
+            {
+              currentTVShow && <TVShowDetail tvShow={currentTVShow} />
+            }
+          </div>
+          <div className="">
+            {
+              currentTVShow && <TVShowList
+                tvShowList={tvShowRecommendations}
+                onClickItem={updateCurrentTVShow}
+              />
+            }
+          </div>
+        </>
+      ):(
+      <div>Axtarışınız üzrə məlumat tapılmadı!</div>
+      )}
+
+
     </div>
   );
 }
